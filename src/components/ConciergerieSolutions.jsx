@@ -10,7 +10,7 @@ const services = [
   { name: "Enfants", icon: "👨‍👧‍👦", desc: "Garde d'enfants, aide aux devoirs, activités" },
 ];
 
-export default function ConciergerieService() {
+export default function ConciergerieSolutions() {
   const [scrolled, setScrolled] = useState(false);
   const [activeService, setActiveService] = useState(null);
   const [visible, setVisible] = useState(false);
@@ -230,7 +230,7 @@ export default function ConciergerieService() {
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 38, height: 38, borderRadius: 12, background: "linear-gradient(135deg, #80CED7, #007EA7)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "white", fontSize: 18, fontFamily: "'Playfair Display', serif" }}>C</div>
-            <span style={{ color: "white", fontWeight: 700, fontSize: 18, fontFamily: "'Playfair Display', serif" }}>conciergerie-service</span>
+            <span style={{ color: "white", fontWeight: 700, fontSize: 18, fontFamily: "'Playfair Display', serif" }}>conciergerie solutions</span>
           </div>
           <div className="desktop-nav" style={{ display: "flex", gap: 32, alignItems: "center" }}>
             <a className="nav-link" href="#prestations">Prestations</a>
@@ -328,7 +328,7 @@ export default function ConciergerieService() {
                 Une approche<br /><span style={{ color: "#80CED7", fontStyle: "italic" }}>humaine</span> et personnalisée
               </h2>
               <p style={{ color: "rgba(204,219,220,0.7)", lineHeight: 1.8, marginBottom: 36, fontSize: 16 }}>
-                Conciergerie-service est née d'une conviction simple : tout le monde mérite un coup de main au quotidien. Que ce soit pour vos courses, votre ménage, vos enfants ou vos démarches administratives, je mets un point d'honneur à vous offrir un accompagnement attentif, fiable et chaleureux.
+                Conciergerie Solutions est née d'une conviction simple : tout le monde mérite un coup de main au quotidien. Que ce soit pour vos courses, votre ménage, vos enfants ou vos démarches administratives, je mets un point d'honneur à vous offrir un accompagnement attentif, fiable et chaleureux.
               </p>
 
               {[
@@ -393,7 +393,7 @@ export default function ConciergerieService() {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
                 <div style={{ width: 34, height: 34, borderRadius: 10, background: "linear-gradient(135deg, #80CED7, #007EA7)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "white", fontSize: 16, fontFamily: "'Playfair Display', serif" }}>C</div>
-                <span style={{ color: "white", fontWeight: 700, fontSize: 16, fontFamily: "'Playfair Display', serif" }}>conciergerie-service</span>
+                <span style={{ color: "white", fontWeight: 700, fontSize: 16, fontFamily: "'Playfair Display', serif" }}>conciergerie solutions</span>
               </div>
               <p style={{ fontSize: 14, lineHeight: 1.7 }}>Votre partenaire de confiance pour une vie plus sereine.</p>
             </div>
@@ -406,11 +406,11 @@ export default function ConciergerieService() {
             <div>
               <div style={{ color: "white", fontWeight: 600, marginBottom: 16, fontSize: 14, textTransform: "uppercase", letterSpacing: 1 }}>Contact</div>
               <div style={{ marginBottom: 8, fontSize: 14 }}>📞 01 23 45 67 89</div>
-              <div style={{ fontSize: 14 }}>✉️ contact@conciergerie-service.fr</div>
+              <div style={{ fontSize: 14 }}>✉️ contact@conciergerie-solutions.fr</div>
             </div>
           </div>
           <div style={{ borderTop: "1px solid rgba(128,206,215,0.1)", paddingTop: 20, textAlign: "center", fontSize: 13 }}>
-            © 2026 conciergerie-service <span className="diamond" /> Tous droits réservés
+            © 2026 conciergerie solutions <span className="diamond" /> Tous droits réservés
           </div>
         </div>
       </footer>

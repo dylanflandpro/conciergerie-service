@@ -1,5 +1,5 @@
-import ConciergerieService from './components/ConciergerieService'
+import ConciergerieSolutions from './components/ConciergerieSolutions'
 
 export default function App() {
-  return <ConciergerieService />
+  return <ConciergerieSolutions />
 }

@@ -1,6 +1,6 @@
-# conciergerie-service
+# conciergerie solutions
 
-Site vitrine pour **conciergerie-service** — services de conciergerie sur-mesure.
+Site vitrine pour **conciergerie solutions** — services de conciergerie sur-mesure.
 
 ## Stack
 
@@ -33,7 +33,7 @@ npm run preview
 │   └── favicon.svg
 ├── src/
 │   ├── components/
-│   │   └── ConciergerieService.jsx   # Composant principal
+│   │   └── ConciergerieSolutions.jsx   # Composant principal
 │   ├── App.jsx
 │   └── main.jsx
 ├── index.html
