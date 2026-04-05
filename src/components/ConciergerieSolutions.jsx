@@ -13,8 +13,19 @@ const services = [
 export default function ConciergerieSolutions() {
   const [scrolled, setScrolled] = useState(false);
   const [activeService, setActiveService] = useState(null);
+  const [drawerService, setDrawerService] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
+
+  const openDrawer = (index) => {
+    setDrawerService(services[index]);
+    setDrawerOpen(true);
+  };
+  const closeDrawer = () => {
+    setDrawerOpen(false);
+    setTimeout(() => setDrawerService(null), 300);
+  };
 
   useEffect(() => {
     setVisible(true);
@@ -26,6 +37,31 @@ export default function ConciergerieSolutions() {
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", color: "#003249", background: "#f8fbfb", minHeight: "100vh", overflowX: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+      {/* Titre fixe en haut à gauche */}
+      <div style={{
+        position: "fixed",
+        top: 35,
+        left: 35,
+        zIndex: 150,
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+      }}>
+        <div style={{
+          width: 38, height: 38, borderRadius: 12,
+          background: "linear-gradient(135deg, #80CED7, #007EA7)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontWeight: 700, color: "white", fontSize: 18,
+          fontFamily: "'Playfair Display', serif",
+          boxShadow: "0 4px 15px rgba(0,126,167,0.3)",
+        }}>C</div>
+        <span style={{
+          color: "white", fontWeight: 700, fontSize: 20,
+          fontFamily: "'Playfair Display', serif",
+          textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+        }}>Conciergerie Service</span>
+      </div>
 
       <style>{`
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -215,9 +251,70 @@ export default function ConciergerieSolutions() {
           border-color: transparent;
         }
 
+        .drawer-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 200;
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(4px);
+          transition: opacity 0.3s ease;
+        }
+        .drawer-overlay.open { opacity: 1; }
+        .drawer-overlay.closed { opacity: 0; pointer-events: none; }
+
+        .drawer-panel {
+          position: fixed;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 201;
+          width: 460px;
+          max-width: 100vw;
+          background: white;
+          box-shadow: -8px 0 40px rgba(0,50,73,0.15);
+          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          overflow-y: auto;
+        }
+        .drawer-panel.open { transform: translateX(0); }
+        .drawer-panel.closed { transform: translateX(100%); }
+
+        .drawer-close {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          border: 1px solid #e8f0f0;
+          background: white;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          color: #6b8a8e;
+          transition: all 0.2s ease;
+        }
+        .drawer-close:hover {
+          background: #f0f5f5;
+          color: #003249;
+        }
+
+        .drawer-badge {
+          display: inline-block;
+          background: linear-gradient(135deg, rgba(0,126,167,0.1), rgba(128,206,215,0.15));
+          color: #007EA7;
+          padding: 4px 14px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 600;
+          margin-right: 8px;
+        }
+
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
           .mobile-toggle { display: flex !important; }
+          .drawer-panel { width: 100vw; }
         }
         @media (min-width: 769px) {
           .mobile-toggle { display: none !important; }
@@ -228,10 +325,7 @@ export default function ConciergerieSolutions() {
       {/* Navigation */}
       <nav className={`nav ${scrolled ? "scrolled" : ""}`} style={{ background: scrolled ? undefined : "transparent" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 38, height: 38, borderRadius: 12, background: "linear-gradient(135deg, #80CED7, #007EA7)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "white", fontSize: 18, fontFamily: "'Playfair Display', serif" }}>C</div>
-            <span style={{ color: "white", fontWeight: 700, fontSize: 18, fontFamily: "'Playfair Display', serif" }}>conciergerie solutions</span>
-          </div>
+          <div style={{ width: 180 }} />
           <div className="desktop-nav" style={{ display: "flex", gap: 32, alignItems: "center" }}>
             <a className="nav-link" href="#prestations">Prestations</a>
             <a className="nav-link" href="#apropos">À propos</a>
@@ -298,13 +392,13 @@ export default function ConciergerieSolutions() {
             Tout ce dont vous avez <span style={{ color: "#007EA7", fontStyle: "italic" }}>besoin</span>
           </h2>
           <p style={{ color: "#6b8a8e", maxWidth: 560, margin: "0 auto", lineHeight: 1.7 }}>
-            Sept catégories de services conçues pour couvrir tous les aspects de votre vie quotidienne.
+            Des services sur-mesure destinés aux <strong style={{ color: "#007EA7" }}>particuliers</strong> et aux <strong style={{ color: "#007EA7" }}>entreprises</strong>, conçus pour couvrir tous les aspects de votre quotidien.
           </p>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
           {services.map((s, i) => (
-            <div key={i} className={`service-card ${activeService === i ? "active" : ""}`} onClick={() => setActiveService(activeService === i ? null : i)}>
+            <div key={i} className={`service-card ${activeService === i ? "active" : ""}`} onClick={() => { setActiveService(activeService === i ? null : i); openDrawer(i); }}>
               <div style={{ fontSize: 40, marginBottom: 16 }}>{s.icon}</div>
               <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 600, marginBottom: 10, color: activeService === i ? "white" : "#003249" }}>{s.name}</h3>
               <p style={{ fontSize: 14, lineHeight: 1.6, color: activeService === i ? "rgba(255,255,255,0.8)" : "#7a9a9e" }}>{s.desc}</p>
@@ -370,7 +464,7 @@ export default function ConciergerieSolutions() {
       </section>
 
       {/* CTA CONTACT */}
-      <section style={{ padding: "80px 24px" }}>
+      <section id="contact" style={{ padding: "80px 24px" }}>
         <div style={{ maxWidth: 800, margin: "0 auto", background: "linear-gradient(160deg, #003249, #007EA7)", borderRadius: 28, padding: "64px 48px", textAlign: "center", position: "relative", overflow: "hidden" }}>
           <div className="grid-overlay" />
           <div style={{ position: "relative", zIndex: 2 }}>
@@ -385,6 +479,40 @@ export default function ConciergerieSolutions() {
           </div>
         </div>
       </section>
+
+      {/* DRAWER - Détail prestation */}
+      <div className={`drawer-overlay ${drawerOpen ? "open" : "closed"}`} onClick={closeDrawer} />
+      <div className={`drawer-panel ${drawerOpen ? "open" : "closed"}`}>
+        {drawerService && (
+          <div style={{ padding: "40px 32px" }}>
+            <button className="drawer-close" onClick={closeDrawer}>✕</button>
+
+            <div style={{ fontSize: 56, marginBottom: 20 }}>{drawerService.icon}</div>
+
+            <h2 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 28, fontWeight: 700,
+              color: "#003249", marginBottom: 12
+            }}>{drawerService.name}</h2>
+
+            <div style={{ marginBottom: 20 }}>
+              <span className="drawer-badge">Particuliers</span>
+              <span className="drawer-badge">Entreprises</span>
+            </div>
+
+            <p style={{ color: "#6b8a8e", lineHeight: 1.8, fontSize: 15, marginBottom: 32 }}>
+              {drawerService.desc}
+            </p>
+
+            <button className="cta-btn" onClick={() => { closeDrawer(); setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 300); }} style={{
+              width: "100%", marginTop: 16,
+              padding: "16px 32px", fontSize: 15
+            }}>
+              Demander un devis
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* FOOTER */}
       <footer style={{ background: "#003249", padding: "48px 24px 28px", color: "rgba(204,219,220,0.5)" }}>
