@@ -464,7 +464,7 @@ export default function ConciergerieSolutions() {
       </section>
 
       {/* CTA CONTACT */}
-      <section style={{ padding: "80px 24px" }}>
+      <section id="contact" style={{ padding: "80px 24px" }}>
         <div style={{ maxWidth: 800, margin: "0 auto", background: "linear-gradient(160deg, #003249, #007EA7)", borderRadius: 28, padding: "64px 48px", textAlign: "center", position: "relative", overflow: "hidden" }}>
           <div className="grid-overlay" />
           <div style={{ position: "relative", zIndex: 2 }}>
@@ -504,7 +504,7 @@ export default function ConciergerieSolutions() {
               {drawerService.desc}
             </p>
 
-            <button className="cta-btn" style={{
+            <button className="cta-btn" onClick={() => { closeDrawer(); setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 300); }} style={{
               width: "100%", marginTop: 16,
               padding: "16px 32px", fontSize: 15
             }}>
