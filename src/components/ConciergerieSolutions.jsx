@@ -1,48 +1,13 @@
 import { useState, useEffect } from "react";
 
 const services = [
-  {
-    name: "Alimentation", icon: "🧺", desc: "Courses, livraisons, préparation de repas à domicile",
-    details: "Nous prenons en charge vos courses alimentaires, la livraison de paniers repas et la préparation de plats à domicile. Service disponible en ponctuel ou en abonnement hebdomadaire.",
-    pour: ["Particuliers", "Entreprises"],
-    exemples: ["Courses hebdomadaires", "Livraison de repas", "Préparation de repas à domicile", "Paniers bio personnalisés"],
-  },
-  {
-    name: "A domicile", icon: "🏠", desc: "Ménage, entretien, petits travaux et bricolage",
-    details: "Entretien régulier ou ponctuel de votre intérieur, petits travaux de bricolage, montage de meubles et interventions rapides pour garder votre espace de vie impeccable.",
-    pour: ["Particuliers", "Entreprises"],
-    exemples: ["Ménage régulier", "Nettoyage de vitres", "Montage de meubles", "Petits travaux de bricolage"],
-  },
-  {
-    name: "Habillement", icon: "👔", desc: "Pressing, retouches, personal shopping",
-    details: "Du pressing aux retouches sur mesure, en passant par le personal shopping : nous vous aidons à soigner votre image au quotidien, avec un service de collecte et livraison.",
-    pour: ["Particuliers", "Entreprises"],
-    exemples: ["Pressing et blanchisserie", "Retouches et couture", "Personal shopping", "Relooking professionnel"],
-  },
-  {
-    name: "Bien-être", icon: "🧘", desc: "Massage, coaching sportif, soins personnels",
-    details: "Offrez-vous un moment de détente avec nos prestations bien-être : massages à domicile, coaching sportif personnalisé et soins esthétiques, pour prendre soin de vous sans vous déplacer.",
-    pour: ["Particuliers", "Entreprises"],
-    exemples: ["Massage à domicile", "Coaching sportif", "Soins esthétiques", "Séances de relaxation en entreprise"],
-  },
-  {
-    name: "Administratif", icon: "✉️", desc: "Courrier, démarches, gestion de documents",
-    details: "Simplifiez vos démarches administratives : gestion du courrier, classement de documents, aide aux formalités, déclarations et suivi de dossiers. Un gain de temps considérable au quotidien.",
-    pour: ["Particuliers", "Entreprises"],
-    exemples: ["Gestion du courrier", "Démarches administratives", "Classement et archivage", "Aide aux déclarations"],
-  },
-  {
-    name: "Mobilité", icon: "🚗", desc: "Transport, accompagnement, véhicule de courtoisie",
-    details: "Besoin de vous déplacer ou de faire transporter quelqu'un ? Nous proposons des services de chauffeur, d'accompagnement (rendez-vous médicaux, aéroport) et de mise à disposition de véhicules.",
-    pour: ["Particuliers", "Entreprises"],
-    exemples: ["Chauffeur privé", "Accompagnement aéroport", "Transport médical", "Véhicule de courtoisie"],
-  },
-  {
-    name: "Enfants", icon: "👨‍👧‍👦", desc: "Garde d'enfants, aide aux devoirs, activités",
-    details: "Des solutions de garde flexibles et fiables : baby-sitting, aide aux devoirs, accompagnement aux activités extra-scolaires. Des intervenants de confiance pour le bien-être de vos enfants.",
-    pour: ["Particuliers"],
-    exemples: ["Baby-sitting", "Aide aux devoirs", "Accompagnement activités", "Garde périscolaire"],
-  },
+  { name: "Alimentation", icon: "🧺", desc: "Courses, livraisons, préparation de repas à domicile" },
+  { name: "A domicile", icon: "🏠", desc: "Ménage, entretien, petits travaux et bricolage" },
+  { name: "Habillement", icon: "👔", desc: "Pressing, retouches, personal shopping" },
+  { name: "Bien-être", icon: "🧘", desc: "Massage, coaching sportif, soins personnels" },
+  { name: "Administratif", icon: "✉️", desc: "Courrier, démarches, gestion de documents" },
+  { name: "Mobilité", icon: "🚗", desc: "Transport, accompagnement, véhicule de courtoisie" },
+  { name: "Enfants", icon: "👨‍👧‍👦", desc: "Garde d'enfants, aide aux devoirs, activités" },
 ];
 
 export default function ConciergerieSolutions() {
@@ -346,22 +311,6 @@ export default function ConciergerieSolutions() {
           margin-right: 8px;
         }
 
-        .drawer-exemple {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 14px 16px;
-          background: #f8fbfb;
-          border-radius: 12px;
-          margin-bottom: 8px;
-          border: 1px solid #e8f0f0;
-          transition: all 0.2s ease;
-        }
-        .drawer-exemple:hover {
-          background: linear-gradient(135deg, rgba(0,126,167,0.05), rgba(128,206,215,0.08));
-          border-color: #9AD1D4;
-        }
-
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
           .mobile-toggle { display: flex !important; }
@@ -547,40 +496,16 @@ export default function ConciergerieSolutions() {
             }}>{drawerService.name}</h2>
 
             <div style={{ marginBottom: 20 }}>
-              {drawerService.pour.map((p, i) => (
-                <span key={i} className="drawer-badge">{p}</span>
-              ))}
+              <span className="drawer-badge">Particuliers</span>
+              <span className="drawer-badge">Entreprises</span>
             </div>
 
             <p style={{ color: "#6b8a8e", lineHeight: 1.8, fontSize: 15, marginBottom: 32 }}>
-              {drawerService.details}
+              {drawerService.desc}
             </p>
 
-            <div style={{
-              width: "100%", height: 1,
-              background: "linear-gradient(90deg, transparent, #e8f0f0, transparent)",
-              marginBottom: 28
-            }} />
-
-            <h4 style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: 18, fontWeight: 600,
-              color: "#003249", marginBottom: 16
-            }}>Exemples de prestations</h4>
-
-            {drawerService.exemples.map((ex, i) => (
-              <div key={i} className="drawer-exemple">
-                <div style={{
-                  width: 8, height: 8, borderRadius: "50%",
-                  background: "linear-gradient(135deg, #007EA7, #80CED7)",
-                  flexShrink: 0
-                }} />
-                <span style={{ color: "#003249", fontSize: 14, fontWeight: 500 }}>{ex}</span>
-              </div>
-            ))}
-
             <button className="cta-btn" style={{
-              width: "100%", marginTop: 32,
+              width: "100%", marginTop: 16,
               padding: "16px 32px", fontSize: 15
             }}>
               Demander un devis
