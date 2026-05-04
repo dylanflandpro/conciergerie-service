@@ -1,13 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+
+const CONTACT_EMAIL = "contact@conciergerie-solutions.fr";
+const CONTACT_PHONE_DISPLAY = "06 04 15 33 99";
+const CONTACT_PHONE_HREF = "+33604153399";
 
 const services = [
-  { name: "Alimentation", icon: "🧺", desc: "Courses, livraisons, préparation de repas à domicile" },
-  { name: "A domicile", icon: "🏠", desc: "Ménage, entretien, petits travaux et bricolage" },
-  { name: "Habillement", icon: "👔", desc: "Pressing, retouches, personal shopping" },
-  { name: "Bien-être", icon: "🧘", desc: "Massage, coaching sportif, soins personnels" },
-  { name: "Administratif", icon: "✉️", desc: "Courrier, démarches, gestion de documents" },
-  { name: "Mobilité", icon: "🚗", desc: "Transport, accompagnement, véhicule de courtoisie" },
-  { name: "Enfants", icon: "👨‍👧‍👦", desc: "Garde d'enfants, aide aux devoirs, activités" },
+  { name: "Alimentation", icon: "🧺", desc: "Courses, livraisons, préparation de repas à domicile", pour: ["Particuliers", "Entreprises"] },
+  { name: "A domicile", icon: "🏠", desc: "Ménage, entretien, petits travaux et bricolage", pour: ["Particuliers", "Entreprises"] },
+  { name: "Habillement", icon: "👔", desc: "Pressing, retouches, personal shopping", pour: ["Particuliers", "Entreprises"] },
+  { name: "Bien-être", icon: "🧘", desc: "Massage, coaching sportif, soins personnels", pour: ["Particuliers", "Entreprises"] },
+  { name: "Administratif", icon: "✉️", desc: "Courrier, démarches, gestion de documents", pour: ["Particuliers", "Entreprises"] },
+  { name: "Mobilité", icon: "🚗", desc: "Transport, accompagnement, véhicule de courtoisie", pour: ["Particuliers", "Entreprises"] },
+  { name: "Enfants", icon: "👨‍👧‍👦", desc: "Garde d'enfants, aide aux devoirs, activités", pour: ["Particuliers", "Entreprises"] },
 ];
 
 export default function ConciergerieSolutions() {
@@ -15,36 +19,64 @@ export default function ConciergerieSolutions() {
   const [activeService, setActiveService] = useState(null);
   const [drawerService, setDrawerService] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [visible, setVisible] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
+  const closeTimeoutRef = useRef(null);
 
   const openDrawer = (index) => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
     setDrawerService(services[index]);
+    setActiveService(index);
     setDrawerOpen(true);
   };
   const closeDrawer = () => {
     setDrawerOpen(false);
-    setTimeout(() => setDrawerService(null), 300);
+    setActiveService(null);
+    closeTimeoutRef.current = setTimeout(() => {
+      setDrawerService(null);
+      closeTimeoutRef.current = null;
+    }, 300);
+  };
+  const toggleDrawer = (index) => {
+    if (drawerOpen && activeService === index) {
+      closeDrawer();
+    } else {
+      openDrawer(index);
+    }
   };
 
   useEffect(() => {
-    setVisible(true);
     const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const handleKey = (e) => {
+      if (e.key === "Escape") closeDrawer();
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [drawerOpen]);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    };
+  }, []);
+
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", color: "#003249", background: "#f8fbfb", minHeight: "100vh", overflowX: "hidden" }}>
-      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-
       {/* Titre fixe en haut à gauche */}
       <div style={{
         position: "fixed",
         top: 35,
         left: 35,
         zIndex: 150,
-        display: "flex",
+        display: mobileMenu ? "none" : "flex",
         alignItems: "center",
         gap: 10,
       }}>
@@ -57,10 +89,12 @@ export default function ConciergerieSolutions() {
           boxShadow: "0 4px 15px rgba(0,126,167,0.3)",
         }}>C</div>
         <span style={{
-          color: "white", fontWeight: 700, fontSize: 20,
+          color: scrolled ? "#003249" : "white",
+          fontWeight: 700, fontSize: 20,
           fontFamily: "'Playfair Display', serif",
-          textShadow: "0 2px 10px rgba(0,0,0,0.3)",
-        }}>Conciergerie Service</span>
+          textShadow: scrolled ? "none" : "0 2px 10px rgba(0,0,0,0.3)",
+          transition: "color 0.4s ease, text-shadow 0.4s ease",
+        }}>Conciergerie Solutions</span>
       </div>
 
       <style>{`
@@ -324,14 +358,21 @@ export default function ConciergerieSolutions() {
 
       {/* Navigation */}
       <nav className={`nav ${scrolled ? "scrolled" : ""}`} style={{ background: scrolled ? undefined : "transparent" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ width: 180 }} />
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
           <div className="desktop-nav" style={{ display: "flex", gap: 32, alignItems: "center" }}>
             <a className="nav-link" href="#prestations">Prestations</a>
             <a className="nav-link" href="#apropos">À propos</a>
-            <button className="cta-btn" style={{ padding: "10px 28px", fontSize: 14 }}>Nous contacter</button>
+            <a href={`mailto:${CONTACT_EMAIL}`} style={{ textDecoration: "none" }}>
+              <button className="cta-btn" style={{ padding: "10px 28px", fontSize: 14 }}>Nous contacter</button>
+            </a>
           </div>
-          <button className="mobile-toggle" onClick={() => setMobileMenu(!mobileMenu)} style={{ background: "none", border: "none", cursor: "pointer", display: "none", flexDirection: "column", gap: 5 }}>
+          <button
+            className="mobile-toggle"
+            onClick={() => setMobileMenu(!mobileMenu)}
+            aria-label={mobileMenu ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={mobileMenu}
+            style={{ background: "none", border: "none", cursor: "pointer", display: "none", flexDirection: "column", gap: 5 }}
+          >
             <span style={{ width: 24, height: 2, background: "white", borderRadius: 2, transition: "all 0.3s", transform: mobileMenu ? "rotate(45deg) translateY(7px)" : "none" }} />
             <span style={{ width: 24, height: 2, background: "white", borderRadius: 2, transition: "all 0.3s", opacity: mobileMenu ? 0 : 1 }} />
             <span style={{ width: 24, height: 2, background: "white", borderRadius: 2, transition: "all 0.3s", transform: mobileMenu ? "rotate(-45deg) translateY(-7px)" : "none" }} />
@@ -344,7 +385,9 @@ export default function ConciergerieSolutions() {
         <div className="mobile-menu-overlay" style={{ position: "fixed", inset: 0, zIndex: 99, background: "rgba(0,50,73,0.97)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 32, animation: "fadeIn 0.3s ease" }}>
           <a href="#prestations" onClick={() => setMobileMenu(false)} style={{ color: "white", textDecoration: "none", fontSize: 24, fontFamily: "'Playfair Display', serif" }}>Prestations</a>
           <a href="#apropos" onClick={() => setMobileMenu(false)} style={{ color: "white", textDecoration: "none", fontSize: 24, fontFamily: "'Playfair Display', serif" }}>À propos</a>
-          <button className="cta-btn" onClick={() => setMobileMenu(false)}>Nous contacter</button>
+          <a href={`mailto:${CONTACT_EMAIL}`} style={{ textDecoration: "none" }} onClick={() => setMobileMenu(false)}>
+            <button className="cta-btn">Nous contacter</button>
+          </a>
         </div>
       )}
 
@@ -357,7 +400,7 @@ export default function ConciergerieSolutions() {
         <div style={{ position: "absolute", top: "40%", right: "15%", width: 120, height: 120, borderRadius: "50%", background: "rgba(128,206,215,0.05)", animation: "float 7s ease-in-out infinite 0.5s" }} />
 
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "120px 24px 80px", position: "relative", zIndex: 2, width: "100%" }}>
-          <div style={{ maxWidth: 680, opacity: visible ? 1 : 0, animation: visible ? "fadeUp 0.8s ease forwards" : "none" }}>
+          <div style={{ maxWidth: 680, animation: "fadeUp 0.8s ease forwards" }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(128,206,215,0.15)", borderRadius: 30, padding: "8px 20px", marginBottom: 28, border: "1px solid rgba(128,206,215,0.2)" }}>
               <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#80CED7" }} />
               <span style={{ color: "#9AD1D4", fontSize: 13, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase" }}>Votre quotidien simplifié</span>
@@ -398,7 +441,7 @@ export default function ConciergerieSolutions() {
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
           {services.map((s, i) => (
-            <div key={i} className={`service-card ${activeService === i ? "active" : ""}`} onClick={() => { setActiveService(activeService === i ? null : i); openDrawer(i); }}>
+            <div key={i} className={`service-card ${activeService === i ? "active" : ""}`} onClick={() => toggleDrawer(i)}>
               <div style={{ fontSize: 40, marginBottom: 16 }}>{s.icon}</div>
               <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 600, marginBottom: 10, color: activeService === i ? "white" : "#003249" }}>{s.name}</h3>
               <p style={{ fontSize: 14, lineHeight: 1.6, color: activeService === i ? "rgba(255,255,255,0.8)" : "#7a9a9e" }}>{s.desc}</p>
@@ -473,8 +516,12 @@ export default function ConciergerieSolutions() {
               N'hésitez pas à me contacter pour discuter de vos besoins. Premier échange gratuit et sans engagement.
             </p>
             <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-              <button className="cta-btn" style={{ background: "white", color: "#003249" }}>Me contacter</button>
-              <button className="cta-btn-outline">01 23 45 67 89</button>
+              <a href={`mailto:${CONTACT_EMAIL}`} style={{ textDecoration: "none" }}>
+                <button className="cta-btn" style={{ background: "white", color: "#003249" }}>Me contacter</button>
+              </a>
+              <a href={`tel:${CONTACT_PHONE_HREF}`} style={{ textDecoration: "none" }}>
+                <button className="cta-btn-outline">{CONTACT_PHONE_DISPLAY}</button>
+              </a>
             </div>
           </div>
         </div>
@@ -482,34 +529,45 @@ export default function ConciergerieSolutions() {
 
       {/* DRAWER - Détail prestation */}
       <div className={`drawer-overlay ${drawerOpen ? "open" : "closed"}`} onClick={closeDrawer} />
-      <div className={`drawer-panel ${drawerOpen ? "open" : "closed"}`}>
+      <div
+        className={`drawer-panel ${drawerOpen ? "open" : "closed"}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="drawer-title"
+        aria-hidden={!drawerOpen}
+      >
         {drawerService && (
           <div style={{ padding: "40px 32px" }}>
-            <button className="drawer-close" onClick={closeDrawer}>✕</button>
+            <button className="drawer-close" onClick={closeDrawer} aria-label="Fermer">✕</button>
 
-            <div style={{ fontSize: 56, marginBottom: 20 }}>{drawerService.icon}</div>
+            <div style={{ fontSize: 56, marginBottom: 20 }} aria-hidden="true">{drawerService.icon}</div>
 
-            <h2 style={{
+            <h2 id="drawer-title" style={{
               fontFamily: "'Playfair Display', serif",
               fontSize: 28, fontWeight: 700,
               color: "#003249", marginBottom: 12
             }}>{drawerService.name}</h2>
 
-            <div style={{ marginBottom: 20 }}>
-              <span className="drawer-badge">Particuliers</span>
-              <span className="drawer-badge">Entreprises</span>
-            </div>
+            {drawerService.pour?.length > 0 && (
+              <div style={{ marginBottom: 20 }}>
+                {drawerService.pour.map((p) => (
+                  <span key={p} className="drawer-badge">{p}</span>
+                ))}
+              </div>
+            )}
 
             <p style={{ color: "#6b8a8e", lineHeight: 1.8, fontSize: 15, marginBottom: 32 }}>
               {drawerService.desc}
             </p>
 
-            <button className="cta-btn" onClick={() => { closeDrawer(); setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 300); }} style={{
-              width: "100%", marginTop: 16,
-              padding: "16px 32px", fontSize: 15
-            }}>
-              Demander un devis
-            </button>
+            <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Demande de devis – ${drawerService.name}`)}`} style={{ textDecoration: "none" }}>
+              <button className="cta-btn" style={{
+                width: "100%", marginTop: 16,
+                padding: "16px 32px", fontSize: 15
+              }}>
+                Demander un devis
+              </button>
+            </a>
           </div>
         )}
       </div>
@@ -521,24 +579,30 @@ export default function ConciergerieSolutions() {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
                 <div style={{ width: 34, height: 34, borderRadius: 10, background: "linear-gradient(135deg, #80CED7, #007EA7)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "white", fontSize: 16, fontFamily: "'Playfair Display', serif" }}>C</div>
-                <span style={{ color: "white", fontWeight: 700, fontSize: 16, fontFamily: "'Playfair Display', serif" }}>conciergerie solutions</span>
+                <span style={{ color: "white", fontWeight: 700, fontSize: 16, fontFamily: "'Playfair Display', serif" }}>Conciergerie Solutions</span>
               </div>
               <p style={{ fontSize: 14, lineHeight: 1.7 }}>Votre partenaire de confiance pour une vie plus sereine.</p>
             </div>
             <div>
               <div style={{ color: "white", fontWeight: 600, marginBottom: 16, fontSize: 14, textTransform: "uppercase", letterSpacing: 1 }}>Prestations</div>
               {services.map((s, i) => (
-                <div key={i} style={{ marginBottom: 8, fontSize: 14, cursor: "pointer" }}>{s.name}</div>
+                <a
+                  key={i}
+                  href="#prestations"
+                  style={{ display: "block", marginBottom: 8, fontSize: 14, color: "inherit", textDecoration: "none" }}
+                >
+                  {s.name}
+                </a>
               ))}
             </div>
             <div>
               <div style={{ color: "white", fontWeight: 600, marginBottom: 16, fontSize: 14, textTransform: "uppercase", letterSpacing: 1 }}>Contact</div>
-              <div style={{ marginBottom: 8, fontSize: 14 }}>📞 01 23 45 67 89</div>
-              <div style={{ fontSize: 14 }}>✉️ contact@conciergerie-solutions.fr</div>
+              <a href={`tel:${CONTACT_PHONE_HREF}`} style={{ display: "block", marginBottom: 8, fontSize: 14, color: "inherit", textDecoration: "none" }}>📞 {CONTACT_PHONE_DISPLAY}</a>
+              <a href={`mailto:${CONTACT_EMAIL}`} style={{ display: "block", fontSize: 14, color: "inherit", textDecoration: "none" }}>✉️ {CONTACT_EMAIL}</a>
             </div>
           </div>
           <div style={{ borderTop: "1px solid rgba(128,206,215,0.1)", paddingTop: 20, textAlign: "center", fontSize: 13 }}>
-            © 2026 conciergerie solutions <span className="diamond" /> Tous droits réservés
+            © {new Date().getFullYear()} Conciergerie Solutions <span className="diamond" /> Tous droits réservés
           </div>
         </div>
       </footer>
