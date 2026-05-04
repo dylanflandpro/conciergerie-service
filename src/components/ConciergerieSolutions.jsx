@@ -560,14 +560,23 @@ export default function ConciergerieSolutions() {
               {drawerService.desc}
             </p>
 
-            <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Demande de devis – ${drawerService.name}`)}`} style={{ textDecoration: "none" }}>
-              <button className="cta-btn" style={{
+            <button
+              className="cta-btn"
+              onClick={() => {
+                const serviceName = drawerService.name;
+                closeDrawer();
+                setTimeout(() => {
+                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                  window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Demande de devis – ${serviceName}`)}`;
+                }, 300);
+              }}
+              style={{
                 width: "100%", marginTop: 16,
                 padding: "16px 32px", fontSize: 15
-              }}>
-                Demander un devis
-              </button>
-            </a>
+              }}
+            >
+              Demander un devis
+            </button>
           </div>
         )}
       </div>
