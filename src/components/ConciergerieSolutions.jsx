@@ -70,32 +70,6 @@ export default function ConciergerieSolutions() {
 
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", color: "#003249", background: "#f8fbfb", minHeight: "100vh", overflowX: "hidden" }}>
-      {/* Titre fixe en haut à gauche */}
-      <div style={{
-        position: "fixed",
-        top: 35,
-        left: 35,
-        zIndex: 150,
-        display: mobileMenu ? "none" : "flex",
-        alignItems: "center",
-        gap: 10,
-      }}>
-        <div style={{
-          width: 38, height: 38, borderRadius: 12,
-          background: "linear-gradient(135deg, #80CED7, #007EA7)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontWeight: 700, color: "white", fontSize: 18,
-          fontFamily: "'Playfair Display', serif",
-          boxShadow: "0 4px 15px rgba(0,126,167,0.3)",
-        }}>C</div>
-        <span style={{
-          color: scrolled ? "#003249" : "white",
-          fontWeight: 700, fontSize: 20,
-          fontFamily: "'Playfair Display', serif",
-          textShadow: scrolled ? "none" : "0 2px 10px rgba(0,0,0,0.3)",
-          transition: "color 0.4s ease, text-shadow 0.4s ease",
-        }}>Conciergerie Solutions</span>
-      </div>
 
       <style>{`
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -358,7 +332,21 @@ export default function ConciergerieSolutions() {
 
       {/* Navigation */}
       <nav className={`nav ${scrolled ? "scrolled" : ""}`} style={{ background: scrolled ? undefined : "transparent" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <a href="#" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+            <div style={{
+              width: 38, height: 38, borderRadius: 12,
+              background: "linear-gradient(135deg, #80CED7, #007EA7)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontWeight: 700, color: "white", fontSize: 18,
+              fontFamily: "'Playfair Display', serif",
+              boxShadow: "0 4px 15px rgba(0,126,167,0.3)",
+            }}>C</div>
+            <span style={{
+              color: "white", fontWeight: 700, fontSize: 20,
+              fontFamily: "'Playfair Display', serif",
+            }}>Conciergerie Solutions</span>
+          </a>
           <div className="desktop-nav" style={{ display: "flex", gap: 32, alignItems: "center" }}>
             <a className="nav-link" href="#prestations">Prestations</a>
             <a className="nav-link" href="#apropos">À propos</a>
